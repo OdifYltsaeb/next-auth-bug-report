@@ -1,4 +1,5 @@
 build-dev:
+	@touch .env.local
 	@docker-compose -f docker-compose-dev.yml build
 
 start-dev:
