@@ -1,0 +1,13 @@
+# Based on Node 16 Alpine image
+FROM node:16-bullseye
+
+# Install system requirements
+RUN apt-get update && apt-get install -y sqlite3
+# Set the default directory where CMD will execute
+WORKDIR /strapi
+
+# Expose our application ports
+EXPOSE 1337
+
+# Set the default command to execute when creating a new container
+CMD /bin/bash -c "yarn && yarn develop"

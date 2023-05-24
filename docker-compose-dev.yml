@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  nextjs:
+    ports:
+      - "8000:8000"
+    build:
+      context: .
+      dockerfile: Dockerfile-next-dev
+    volumes:
+      - "./next:/app"
+      - ".data/next/node_modules:/app/node_modules"
+      - ".data/next/yarn:/usr/local/share/.cache/yarn"
+    env_file:
+      - .env.local
+
+  postgres:
+    image: postgres:12
+    # Comment in the following lines to connect to your Dockerized instance of Postgres from your host machine.
+    # Change the host port (before colon) if you have a local instance of Postgres running on that port.
+    # ports:
+    #     - "5432:5432"
+    container_name: "strapi_commerce_postgres"
+    volumes:
+      - ".data/postgres:/var/lib/postgresql/data"
+      - "./scripts/create-citext-extension.sql:/docker-entrypoint-initdb.d/create-citext-extension.sql"
+    environment:
+      # credentials taken from .env file
+      POSTGRES_DB: "strapi_commerce"
+      POSTGRES_USER: "strapi"
+      POSTGRES_PASSWORD: "strapi"
+
+  strapi:
+    ports:
+      - "1337:1337"
+    build:
+      context: .
+      dockerfile: Dockerfile-strapi-dev
+    volumes:
+      - "./strapi:/strapi"
+      - ".data/strapi/node_modules:/strapi/node_modules"
+      - ".data/strapi/yarn:/usr/local/share/.cache/yarn"
+      - ".data/strapi/.tmp:/strapi/.tmp"
+    env_file:
+      - .env.local
