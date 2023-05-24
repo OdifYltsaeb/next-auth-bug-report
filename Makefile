@@ -1,7 +1,7 @@
 build-dev:
 	@touch .env.local
 	@cp strapi/.env.example strapi/.env
-	@cp nextjs/.env.example nextjs/.env
+	@cp next/.env.example next/.env
 	@docker-compose -f docker-compose-dev.yml build
 
 start-dev:
